@@ -1,37 +1,40 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class Asteroid {
-    private int x;
-    private int y;
-    private float vx;
-    private float vy;
+    private final Vector2 position;
+    private final Vector2 velocity;
     private static Texture myTexture;
 
     public static void setMyTexture(Texture myTexture) {
         Asteroid.myTexture = myTexture;
     }
 
-    public Asteroid(int x, int y, float vx, float vy) {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
+    public Asteroid(Vector2 position, Vector2 velocity) {
+        this.position = position;
+        this.velocity = velocity;
     }
 
-    public void update() {
-        x += vx;
-        y += vy;
+    private final int textureWidth = myTexture.getWidth();
+    private final int textureHeight = myTexture.getHeight();
+    private final int ScreenWidth = Gdx.graphics.getWidth();
+    private final int ScreenHeight = Gdx.graphics.getHeight();
 
-        if(x > 800) x = -256; // - texture resolution
-        if(x < -256) x = 800; // - texture resolution
-        if(y > 600) x = -256; // - texture resolution        if(x > 800) x = -256; // - texture resolution
-        if(y < -256) x = 600; // - texture resolution
+    public void update() {
+        position.add(velocity);
+
+        if(position.x > ScreenWidth) position.x = -textureWidth;
+        if(position.x < -textureWidth) position.x = ScreenWidth;
+        if(position.y > ScreenHeight) position.y = -textureHeight;
+        if(position.y < -textureHeight) position.y = ScreenHeight;
+
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(myTexture, x, y);
+        batch.draw(myTexture, position.x, position.y);
     }
 }
